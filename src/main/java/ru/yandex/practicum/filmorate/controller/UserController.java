@@ -51,7 +51,7 @@ public class UserController {
     }
 
     private User validationUser(User user) {
-        if (user.getId()== 0 && user.getEmail() == null && user.getLogin() == null && user.getBirthday() == null
+        if (user.getId() == 0 && user.getEmail() == null && user.getLogin() == null && user.getBirthday() == null
                 && user.getName() == null) {
             log.warn("Все данные пользователя пусты.");
             throw new ValidationException("Все данные пользователя пусты.");

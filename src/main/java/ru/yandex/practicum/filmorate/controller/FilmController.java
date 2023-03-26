@@ -56,7 +56,7 @@ public class FilmController {
         int maxDescriptionSize = 200;
 
         if (film.getId() == 0 && film.getDescription() == null && film.getReleaseDate() == null
-        && film.getName() == null && film.getDuration() == 0 ) {
+                && film.getName() == null && film.getDuration() == 0) {
             log.warn("Все данные фильма пусты.");
             throw new ValidationException("Все данные фильма пусты.");
         }
