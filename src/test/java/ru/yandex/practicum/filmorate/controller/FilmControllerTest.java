@@ -69,7 +69,7 @@ class FilmControllerTest {
             .releaseDate(LocalDate.of(2010, 10, 10))
             .duration(-10)
             .build();
-    Film FilmIncorrect = Film.builder()
+    Film filmIncorrect = Film.builder()
             .build();
 
 
@@ -114,7 +114,7 @@ class FilmControllerTest {
             assertEquals(e.getMessage(), "Дата релиза не может быть пустой или раньше чем 28.12.1895.");
         }
         try {
-            controller.put(FilmIncorrect);
+            controller.put(filmIncorrect);
         } catch (ValidationException e) {
             assertEquals(e.getMessage(), "Все данные фильма пусты.");
         }
@@ -160,7 +160,7 @@ class FilmControllerTest {
             assertEquals(e.getMessage(), "Дата релиза не может быть пустой или раньше чем 28.12.1895.");
         }
         try {
-            controller.create(FilmIncorrect);
+            controller.create(filmIncorrect);
         } catch (ValidationException e) {
             assertEquals(e.getMessage(), "Все данные фильма пусты.");
         }
