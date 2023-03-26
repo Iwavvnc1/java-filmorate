@@ -16,8 +16,8 @@ import java.util.Map;
 public class FilmController {
 
     private final LocalDate initialReleaseDate = LocalDate.of(1895, 12, 28);
-    static int idFilm= 0;
-    private final Map<String, Film> films = new HashMap<>();
+    public static int idFilm = 1;
+    private final Map<Integer, Film> films = new HashMap<>();
 
     @GetMapping
     public Collection<Film> findAll() {
@@ -27,40 +27,55 @@ public class FilmController {
     @PostMapping
     public Film create(@RequestBody Film film) {
         validationFilm(film);
-        if (films.containsKey(film.getName())) {
-            throw new ValidationException("Фильма с названием " +
-                    film.getName() + " уже добавлен.");
+        if (film.getId() == 0) {
+            film = film.toBuilder().id(idFilm++).build();
+            while (films.containsKey(film.getId())) {
+                film = film.toBuilder().id(idFilm++).build();
+            }
         }
-        film.toBuilder().id(++idFilm);
-        films.put(film.getName(), film);
+        if (films.containsKey(film.getId())) {
+            throw new ValidationException("Фильма с id " + film.getId() + " уже добавлен.");
+        }
+        films.put(film.getId(), film);
+        log.debug("Добавлен фильм с id " + film.getId());
         return film;
     }
 
     @PutMapping
     public Film put(@RequestBody Film film) {
         validationFilm(film);
-        films.put(film.getName(), film);
+        if (!films.containsKey(film.getId())) {
+            throw new ValidationException("Фильм с id " + film.getId() + " еще не добавлен.");
+        }
+        films.put(film.getId(), film);
+        log.debug("Обновлены данные фильма с id " + film.getId());
         return film;
     }
 
     private void validationFilm(Film film) {
         int maxDescriptionSize = 200;
 
+        if (film.getId() == 0 && film.getDescription() == null && film.getReleaseDate() == null
+        && film.getName() == null && film.getDuration() == 0 ) {
+            log.warn("Все данные фильма пусты.");
+            throw new ValidationException("Все данные фильма пусты.");
+        }
         if (film.getName() == null || film.getName().isBlank()) {
+            log.warn("Не верное название фильма");
             throw new ValidationException("Название фильма не может быть пустым.");
         }
-        if (film.getDescription().length() > maxDescriptionSize) {
-            throw new ValidationException("Максимальная длина описания — 200 символов.");
+        if (film.getDescription() == null || film.getDescription().isBlank()
+                || film.getDescription().length() > maxDescriptionSize) {
+            log.warn("Не верное описание фильма.");
+            throw new ValidationException("Описания не может быть пустым или больше 200 символов.");
         }
-        if (film.getReleaseDate().isBefore(initialReleaseDate)) {
-            throw new ValidationException("Дата релиза не может быть раньше чем 28.12.1895.");
+        if (film.getReleaseDate() == null || film.getReleaseDate().isBefore(initialReleaseDate)) {
+            log.warn("Не верная дата релиза фильма.");
+            throw new ValidationException("Дата релиза не может быть пустой или раньше чем 28.12.1895.");
         }
         if (film.getDuration() <= 0) {
+            log.warn("Не верная продолжительность фильма.");
             throw new ValidationException("Продолжительность фильма неможет быть меньше или равна 0.");
         }
     }
-    /*Для FilmController:
-добавление фильма;
-обновление фильма;
-получение всех фильмов.*/
 }
