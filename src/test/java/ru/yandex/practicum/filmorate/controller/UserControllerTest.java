@@ -7,7 +7,8 @@ import ru.yandex.practicum.filmorate.model.User;
 
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class UserControllerTest {
     UserController controller = new UserController();
@@ -118,7 +119,7 @@ class UserControllerTest {
         } catch (ValidationException e) {
             assertEquals(e.getMessage(), "Все данные пользователя пусты.");
         }
-        assertEquals(controller.findAll().size(),2);
+        assertEquals(controller.findAll().size(), 2);
     }
 
     @Test
@@ -160,6 +161,6 @@ class UserControllerTest {
         } catch (ValidationException e) {
             assertEquals(e.getMessage(), "Все данные пользователя пусты.");
         }
-        assertEquals(controller.findAll().size(),2);
+        assertEquals(controller.findAll().size(), 2);
     }
 }
