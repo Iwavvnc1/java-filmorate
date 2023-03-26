@@ -117,7 +117,7 @@ class FilmControllerTest {
         } catch (ValidationException e) {
             assertEquals(e.getMessage(), "Все данные фильма пусты.");
         }
-        assertEquals(controller.findAll().size(),1);
+        assertEquals(controller.findAll().size(), 1);
     }
 
     @Test
@@ -163,6 +163,6 @@ class FilmControllerTest {
         } catch (ValidationException e) {
             assertEquals(e.getMessage(), "Все данные фильма пусты.");
         }
-        assertEquals(controller.findAll().size(),1);
+        assertEquals(controller.findAll().size(), 1);
     }
 }
