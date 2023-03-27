@@ -9,13 +9,10 @@
 *.rar
 hs_err_pid*
 out/
-HELP.md
 target/
-.mvn/
-**/src/main/**/target/
-**/src/test/**/target/
-mvnw
-mvnw.cmd
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
 
 ### STS ###
 .apt_generated
