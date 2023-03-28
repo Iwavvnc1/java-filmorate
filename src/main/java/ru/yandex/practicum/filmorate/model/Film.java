@@ -22,5 +22,5 @@ public class Film {
     @ReleaseDateConstraint
     LocalDate releaseDate;
 
-    @NotNull @Min(1) int duration;
+    @Min(1) @NotNull int duration;
 }
