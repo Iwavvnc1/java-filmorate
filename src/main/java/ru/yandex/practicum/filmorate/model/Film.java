@@ -3,7 +3,7 @@ package ru.yandex.practicum.filmorate.model;
 
 import lombok.Builder;
 import lombok.Value;
-import ru.yandex.practicum.filmorate.CustomValidator.ReleaseDateConstraint;
+import ru.yandex.practicum.filmorate.customValidator.ReleaseDateConstraint;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
@@ -17,10 +17,16 @@ import java.time.LocalDate;
 public class Film {
 
     int id;
-    @NotBlank @Valid String name;
-    @NotBlank @Size(max = 200) String description;
+    @NotBlank
+    @Valid
+    String name;
+    @NotBlank
+    @Size(max = 200)
+    String description;
     @ReleaseDateConstraint
     LocalDate releaseDate;
 
-    @Min(1) @NotNull int duration;
+    @Min(1)
+    @NotNull
+    int duration;
 }

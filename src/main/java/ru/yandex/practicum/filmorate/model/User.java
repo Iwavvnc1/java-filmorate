@@ -11,8 +11,14 @@ import java.time.LocalDate;
 @Builder(toBuilder = true)
 public class User {
     int id;
-    @NotBlank @Email String email;
-    @NotBlank @Pattern(regexp = "\\S+") String login;
+    @NotBlank
+    @Email
+    String email;
+    @NotBlank
+    @Pattern(regexp = "\\S+")
+    String login;
     String name;
-    @NotNull @Past LocalDate birthday;
+    @NotNull
+    @Past
+    LocalDate birthday;
 }
