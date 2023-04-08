@@ -11,6 +11,8 @@ import ru.yandex.practicum.filmorate.service.UserService;
 import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -86,32 +88,36 @@ class UserServiceTest {
 
     @Test
     void addFriend() {
-        assertEquals(service.addFriend(1L, 2L).getFriends().toString(), "[2]");
+        Set<Long> id = new HashSet<>();
+        id.add(id2);
+        assertEquals(service.addFriend(id1, id2).getFriends().toString(), id.toString());
     }
 
     @Test
     void deleteFriend() {
-        assertEquals(service.addFriend(1L, 2L).getFriends().toString(), "[2]");
-        assertEquals(service.deleteFriend(1L, 2L).getFriends().toString(), "[]");
+        Set<Long> id = new HashSet<>();
+        id.add(id2);
+        assertEquals(service.addFriend(id1, id2).getFriends().toString(), id.toString());
+        assertEquals(service.deleteFriend(id1, id2).getFriends().toString(), "[]");
     }
 
     @Test
     void getFriends() {
-        if (service.getFriends(3L) == null || service.getFriends(3L).isEmpty()) {
-            service.addFriend(3L, 2L);
+        if (service.getFriends(id3) == null || service.getFriends(id3).isEmpty()) {
+            service.addFriend(id3, id2);
         }
-        assertEquals(service.getUser(2L), service.getFriends(3L).stream().findFirst().get());
+        assertEquals(service.getUser(id2), service.getFriends(id3).stream().findFirst().get());
     }
 
     @Test
     void getCommonFriends() {
-        service.addFriend(1L, 2L);
-        service.addFriend(3L, 2L);
-        assertEquals(service.getUser(2L), service.getCommonFriends(1L, 3L).stream().findFirst().get());
+        service.addFriend(id1, id2);
+        service.addFriend(id3, id2);
+        assertEquals(service.getUser(id2), service.getCommonFriends(id1, id3).stream().findFirst().get());
     }
 
     @Test
     void getUser() {
-        assertEquals(User.class, service.getUser(1L).getClass());
+        assertEquals(User.class, service.getUser(id1).getClass());
     }
 }
