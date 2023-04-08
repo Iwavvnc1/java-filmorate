@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exceptions.IncorrectParameterException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 import java.util.Collection;
@@ -40,7 +39,7 @@ public class UserService {
                     User user = userStorage.findAll().stream()
                             .filter(users -> users.getId().equals(userId))
                             .findFirst().get();
-                    if (user.getFriends() == null ||user.getFriends().stream().noneMatch(usersId -> usersId.equals(userId))) {
+                    if (user.getFriends() == null || user.getFriends().stream().noneMatch(usersId -> usersId.equals(userId))) {
                         user.getFriends().add(friendId);
                         User friend = userStorage.findAll().stream()
                                 .filter(users -> users.getId().equals(friendId))

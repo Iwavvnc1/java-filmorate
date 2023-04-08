@@ -1,7 +1,6 @@
 package ru.yandex.practicum.filmorate.model;
 
 
-import com.google.gson.annotations.Expose;
 import lombok.Builder;
 import lombok.Value;
 import ru.yandex.practicum.filmorate.customValidator.ReleaseDateConstraint;
