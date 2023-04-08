@@ -106,10 +106,8 @@ class UserServiceTest {
     @Test
     void getCommonFriends() {
         service.addFriend(1L, 2L);
-        service.addFriend(3L
-                , 2L);
-        assertEquals(service.getUser(2L), service.getCommonFriends(1L
-                , 3L).stream().findFirst().get());
+        service.addFriend(3L, 2L);
+        assertEquals(service.getUser(2L), service.getCommonFriends(1L, 3L).stream().findFirst().get());
     }
 
     @Test
