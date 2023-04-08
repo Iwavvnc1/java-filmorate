@@ -14,7 +14,7 @@ import java.util.Map;
 @Component
 @Slf4j
 public class InMemoryFilmStorage implements FilmStorage {
-    public static Long idFilm = 1L;
+    private static Long idFilm = 1L;
     private final Map<Long, Film> films = new HashMap<>();
 
     public Collection<Film> findAll() {

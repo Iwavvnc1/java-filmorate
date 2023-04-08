@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exceptions.IncorrectParameterException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
+import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -13,10 +14,10 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserService {
-    InMemoryUserStorage userStorage;
+    UserStorage userStorage;
 
     @Autowired
-    public UserService(InMemoryUserStorage userStorage) {
+    public UserService(UserStorage userStorage) {
         this.userStorage = userStorage;
     }
 
@@ -39,7 +40,7 @@ public class UserService {
                     User user = userStorage.findAll().stream()
                             .filter(users -> users.getId().equals(userId))
                             .findFirst().get();
-                    if (user.getFriends().stream().noneMatch(usersId -> usersId.equals(userId))) {
+                    if (user.getFriends() == null ||user.getFriends().stream().noneMatch(usersId -> usersId.equals(userId))) {
                         user.getFriends().add(friendId);
                         User friend = userStorage.findAll().stream()
                                 .filter(users -> users.getId().equals(friendId))

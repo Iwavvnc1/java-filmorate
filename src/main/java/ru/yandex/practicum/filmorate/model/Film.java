@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.model;
 
 
+import com.google.gson.annotations.Expose;
 import lombok.Builder;
 import lombok.Value;
 import ru.yandex.practicum.filmorate.customValidator.ReleaseDateConstraint;
@@ -17,8 +18,8 @@ import java.util.Set;
 @Value
 @Builder(toBuilder = true)
 public class Film {
+    @NotNull
     Set<Long> likes = new HashSet<>();
-
     Long id;
     @NotBlank
     @Valid
@@ -28,7 +29,6 @@ public class Film {
     String description;
     @ReleaseDateConstraint
     LocalDate releaseDate;
-
     @Min(1)
     @NotNull
     int duration;
