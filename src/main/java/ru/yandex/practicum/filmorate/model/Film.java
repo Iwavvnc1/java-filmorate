@@ -2,7 +2,8 @@ package ru.yandex.practicum.filmorate.model;
 
 
 import lombok.Builder;
-import lombok.Value;
+import lombok.Data;
+import org.springframework.data.annotation.Id;
 import ru.yandex.practicum.filmorate.customValidator.ReleaseDateConstraint;
 
 import javax.validation.Valid;
@@ -14,11 +15,10 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-@Value
+@Data
 @Builder(toBuilder = true)
 public class Film {
-    @NotNull
-    Set<Long> likes = new HashSet<>();
+    @Id
     Long id;
     @NotBlank
     @Valid
@@ -31,8 +31,11 @@ public class Film {
     @Min(1)
     @NotNull
     int duration;
+    @Builder.Default
+    Set<Genre> genres = new HashSet<>();
+    RatingMpa mpa;
 
-    public Set<Long> getLikes() {
-        return likes;
+    public void addGenre(Genre genre) {
+        genres.add(genre);
     }
 }

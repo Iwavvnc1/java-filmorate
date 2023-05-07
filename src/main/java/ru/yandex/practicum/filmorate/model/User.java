@@ -3,16 +3,15 @@ package ru.yandex.practicum.filmorate.model;
 
 import lombok.Builder;
 import lombok.Value;
+import org.springframework.data.annotation.Id;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
 
 @Value
 @Builder(toBuilder = true)
 public class User {
-    Set<Long> friends = new HashSet<>();
+    @Id
     Long id;
     @NotBlank
     @Email
@@ -24,8 +23,4 @@ public class User {
     @NotNull
     @Past
     LocalDate birthday;
-
-    public Set<Long> getFriends() {
-        return friends;
-    }
 }
