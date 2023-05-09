@@ -3,9 +3,6 @@ package ru.yandex.practicum.filmorate.storage.film;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
-import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Repository;
@@ -14,7 +11,9 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.RatingMpa;
 
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -217,7 +216,7 @@ public class FilmDbStorage implements FilmStorage {
         jdbcTemplate.execute("CREATE TEMPORARY TABLE IF NOT EXISTS temp_table (id INT NOT NULL)");
         List<Object[]> employeeIds = new ArrayList<>();
         for (Long id : filmsTable.keySet()) {
-            employeeIds.add(new Object[] { id });
+            employeeIds.add(new Object[]{id});
         }
         String name = "temp_table";
         jdbcTemplate.batchUpdate("INSERT INTO " + name + " VALUES(?)", employeeIds);
