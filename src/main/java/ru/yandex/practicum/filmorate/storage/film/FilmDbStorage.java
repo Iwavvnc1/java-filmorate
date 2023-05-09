@@ -3,6 +3,9 @@ package ru.yandex.practicum.filmorate.storage.film;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Repository;
@@ -11,9 +14,7 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.RatingMpa;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -213,19 +214,27 @@ public class FilmDbStorage implements FilmStorage {
 
     private List<Film> addGenreForList(List<Film> films) {
         Map<Long, Film> filmsTable = films.stream().collect(Collectors.toMap(Film::getId, film -> film));
-        String inSql = String.join(", ", Collections.nCopies(filmsTable.size(), "?"));
-        final String sqlQuery = "SELECT * "
-                + "FROM film_genres "
-                + "LEFT OUTER JOIN genres ON film_genres.genre_id = genres.genre_id "
-                + "WHERE film_genres.film_id IN (" + inSql + ") "
-                + "ORDER BY film_genres.genre_id";
+        jdbcTemplate.execute("CREATE TEMPORARY TABLE IF NOT EXISTS temp_table (id INT NOT NULL)");
+        List<Object[]> employeeIds = new ArrayList<>();
+        for (Long id : filmsTable.keySet()) {
+            employeeIds.add(new Object[] { id });
+        }
+        String name = "temp_table";
+        jdbcTemplate.batchUpdate("INSERT INTO " + name + " VALUES(?)", employeeIds);
+        final String sqlQuery =
+                "SELECT * " +
+                        "FROM film_genres " +
+                        "LEFT OUTER JOIN genres ON film_genres.genre_id = genres.genre_id " +
+                        "WHERE film_genres.film_id IN (SELECT id FROM " + name + ") " +
+                        "ORDER BY film_genres.genre_id";
         jdbcTemplate.query(sqlQuery, (rs) -> {
             filmsTable.get(rs.getLong("film_id"))
                     .addGenre(Genre.builder()
                             .id(rs.getLong("genre_id"))
                             .name(rs.getString("genre_name"))
                             .build());
-        }, filmsTable.keySet().toArray());
+        });
+        jdbcTemplate.execute("DROP TABLE " + name);
         return films;
     }
 }
