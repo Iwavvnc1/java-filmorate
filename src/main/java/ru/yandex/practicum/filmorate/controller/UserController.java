@@ -57,9 +57,10 @@ public class UserController {
         return userService.getCommonFriends(userId, otherId);
     }
 
+
     @GetMapping("/{id}")
     public User getUser(@Valid @RequestBody @PathVariable("id") Long userId) {
-        return userService.getUser(userId);
+        return userService.getUserById(userId);
     }
 
 }
